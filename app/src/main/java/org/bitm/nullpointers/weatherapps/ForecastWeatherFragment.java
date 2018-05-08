@@ -4,6 +4,8 @@ package org.bitm.nullpointers.weatherapps;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,9 @@ import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather;
 import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather.WeatherList;
 import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather.Weather;
 import org.bitm.nullpointers.weatherapps.Utils.WeatherForecastApi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,10 +31,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ForecastWeatherFragment extends Fragment {
 
+    private RecyclerView forecastRecyclerView;
+    private RecyclerView.Adapter forecastAdapter;
+
+    private List<ForecastWeather.Weather> weatherList;
+
     private Retrofit retrofit;
     private WeatherForecastApi weatherForecastApi;
     private String urlString;
-    private java.util.List<Weather> weatherList;
 
     private String units = "metric"; //imperial
     private static final String FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast/";
@@ -50,6 +59,12 @@ public class ForecastWeatherFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        forecastRecyclerView = view.findViewById(R.id.weatherForecastRecyclerView);
+        forecastRecyclerView.setHasFixedSize(true);
+        forecastRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        weatherList = new ArrayList<>();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(FORECAST_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -69,13 +84,7 @@ public class ForecastWeatherFragment extends Fragment {
             @Override
             public void onResponse(Call<ForecastWeather> call, Response<ForecastWeather> response) {
                 if (response.isSuccessful()) {
-                    ForecastWeather currentWeather = response.body();
-                    java.util.List<WeatherList> weatherWeatherList = currentWeather
-                            .getWeatherList();
-                    // WeatherList singleItem = weatherWeatherList.get(0);
-                    // Temp temperature = singleItem.getTemp();
-
-                    // Toast.makeText(getActivity(), temperature.getDay() + "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
                 }
             }
 
