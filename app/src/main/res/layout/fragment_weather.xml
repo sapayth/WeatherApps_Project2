@@ -1,0 +1,227 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#d4c3f1"
+    tools:context="org.bitm.nullpointers.weatherapps.WeatherFragment">
+
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#bda9f7"
+
+        android:orientation="horizontal">
+        <LinearLayout
+            android:padding="20dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/temperatureTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="134.5\u00B0 C"
+                android:textSize="28sp"/>
+            <TextView
+                android:id="@+id/dateTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5/7/2018"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/dayTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tuesday"
+                android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/locationTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dhaka"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/weatherIconImageView"
+                android:layout_margin="30dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/clouds"/>
+            <TextView
+                android:id="@+id/weatherDescTextView"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scattered Cloud"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#9269ea"
+        android:layout_margin="10dp"
+ >
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/maxTempTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17.0\u00B0 C"
+                android:textSize="20sp"/>
+            <TextView
+
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/minTempTextView"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17.0\u00B0 C"
+                android:textSize="20sp"/>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:src="@drawable/temperature"/>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun rise"
+                android:textSize="18sp"
+                android:textColor="#000"
+                />
+
+            <TextView
+                android:id="@+id/sunriseTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07:09:24 AM"
+                android:textSize="15sp"
+                android:textColor="#000"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun Set"
+                android:textSize="18sp"
+                android:textColor="#000"
+                />
+            <TextView
+                android:id="@+id/sunsetTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="05:45:00 PM"
+                android:textSize="15sp"
+                android:textColor="#000"
+                />
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:src="@drawable/sunset"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Humidity"
+                android:textSize="18sp"
+                android:textColor="#000"
+                />
+
+            <TextView
+                android:id="@+id/humidityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="86%"
+                android:textColor="#000"
+                android:textSize="18sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pressure"
+                android:textSize="18sp"
+                android:textColor="#000"
+                />
+            <TextView
+                android:id="@+id/pressureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1021.71 hPa"
+                android:textSize="15sp"
+                android:textColor="#000"
+                />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:src="@drawable/rain"
+                android:textColor="#000"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
