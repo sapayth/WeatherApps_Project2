@@ -1,23 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
+    android:padding="16dp"
     tools:context="org.bitm.nullpointers.weatherapps.ForecastWeatherFragment">
 
 
     <TextView
-        android:layout_margin="10dp"
+        android:id="@+id/noForecastDataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Data Found Yet"
-
+        android:text="@string/no_data_found_yet"
         android:textSize="20sp"
         android:layout_gravity="center"/>
 
-    <ListView
-        android:id="@+id/weatherLV"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/weatherForecastRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-</LinearLayout>
+        android:layout_height="match_parent"/>
+
+
+</RelativeLayout>
