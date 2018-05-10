@@ -9,16 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.bitm.nullpointers.weatherapps.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
 
-    private List<ForecastWeather.WeatherList> forecastWeatherList;
+    private List<ForecastWeather.List> forecastWeatherList;
     private Context context;
 
-    public ForecastAdapter(List<ForecastWeather.WeatherList> forecastWeatherList, Context context) {
+    public ForecastAdapter(List<ForecastWeather.List> forecastWeatherList, Context context) {
         this.forecastWeatherList = forecastWeatherList;
         this.context = context;
     }
@@ -33,14 +38,18 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
-        ForecastWeather.WeatherList currentForecastWeather = forecastWeatherList.get(position);
+        ForecastWeather.List currentForecastWeather = forecastWeatherList.get(position);
         ForecastWeather.Temp temperature = currentForecastWeather.getTemp();
 
-        holder.dayTV.setText(currentForecastWeather.getDt() + "");
-        holder.maxTV.setText(temperature.getMax() + "\u00B0 C");
+        String iconId = currentForecastWeather.getWeather().get(0).getIcon();
 
-        holder.dateTV.setText(currentForecastWeather.getDt() + "");
-        holder.minTV.setText(temperature.getMin() + "\u00B0 C");
+        holder.dayTV.setText(unixToDay(currentForecastWeather.getDt()));
+        holder.maxTV.setText("Max: " + temperature.getMax() + "\u00B0 C");
+        holder.dateTV.setText(unixToDate(currentForecastWeather.getDt()));
+        holder.minTV.setText("Min: " + temperature.getMin() + "\u00B0 C");
+
+        Picasso.get().load("https://openweathermap.org/img/w/" + iconId + ".png")
+                .into(holder.weatherIV);
 
     }
 
@@ -66,5 +75,60 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             dateTV = itemView.findViewById(R.id.dateTextView);
             maxTV = itemView.findViewById(R.id.maxTempTextView);
         }
+    }
+
+    private String unixToDay(long timeStamp) {
+        java.util.Date dateTime = new java.util.Date((long)timeStamp*1000);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateTime);
+        int dayInt = cal.get(Calendar.DAY_OF_WEEK);
+
+        String dayStr = "Saturday";
+
+        switch (dayInt) {
+            case Calendar.SATURDAY:
+                dayStr = "Saturday";
+                break;
+            case Calendar.SUNDAY:
+                dayStr = "Sunday";
+                break;
+            case Calendar.MONDAY:
+                dayStr = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                dayStr = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                dayStr = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                dayStr = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                dayStr = "Friday";
+                break;
+        }
+
+        return dayStr;
+    }
+
+    private String unixToDate(long timestamp) {
+        // convert seconds to milliseconds
+        Date date = new java.util.Date(timestamp*1000L);
+        // the format of your date
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = sdf.format(date);
+
+        return formattedDate;
+    }
+
+    private String getTimeFromUnix(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp * 1000);
+
+        Date d = calendar.getTime();
+        String timeStr = new SimpleDateFormat("hh:mm a").format(d);
+
+        return timeStr;
     }
 }

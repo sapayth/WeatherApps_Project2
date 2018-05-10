@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.bitm.nullpointers.weatherapps.Utils.ForecastAdapter;
 import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather;
-import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather.WeatherList;
-import org.bitm.nullpointers.weatherapps.Utils.ForecastWeather.Weather;
 import org.bitm.nullpointers.weatherapps.Utils.WeatherForecastApi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,18 +29,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ForecastWeatherFragment extends Fragment {
 
+    private long latitude;
+    private long longitude;
+    private int cnt;
+    private String units = "metric"; //imperial
+
     private RecyclerView forecastRecyclerView;
     private RecyclerView.Adapter forecastAdapter;
 
-    private List<ForecastWeather.Weather> weatherList;
+    List<ForecastWeather.List> weatherList;
 
     private Retrofit retrofit;
     private WeatherForecastApi weatherForecastApi;
     private String urlString;
 
-    private String units = "metric"; //imperial
     private static final String FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast/";
-
 
     public ForecastWeatherFragment() {
         // Required empty public constructor
@@ -63,8 +64,6 @@ public class ForecastWeatherFragment extends Fragment {
         forecastRecyclerView.setHasFixedSize(true);
         forecastRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        weatherList = new ArrayList<>();
-
         retrofit = new Retrofit.Builder()
                 .baseUrl(FORECAST_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -72,10 +71,11 @@ public class ForecastWeatherFragment extends Fragment {
 
         weatherForecastApi = retrofit.create(WeatherForecastApi.class);
 
-        urlString = String.format("daily?lat=%f&lon=%f&units=%s&appid=%s",
+        urlString = String.format("daily?lat=%f&lon=%f&units=%s&cnt=%d&appid=%s",
                 34.966671,
                 138.933334,
                 units,
+                7,
                 getString(R.string.weather_api_key));
 
         Call<ForecastWeather> responseCall = weatherForecastApi.getWeatherData(urlString);
@@ -84,7 +84,12 @@ public class ForecastWeatherFragment extends Fragment {
             @Override
             public void onResponse(Call<ForecastWeather> call, Response<ForecastWeather> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Success!", Toast.LENGTH_SHORT).show();
+                    ForecastWeather forecastWeather = response.body();
+
+                    weatherList = forecastWeather.getList();
+                    forecastAdapter = new ForecastAdapter(weatherList, getContext());
+
+                    forecastRecyclerView.setAdapter(forecastAdapter);
                 }
             }
 

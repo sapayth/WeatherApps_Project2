@@ -10,7 +10,7 @@ public class CurrentWeather {
     @SerializedName("coord")
     @Expose
     private Coord coord;
-    @SerializedName("weatherList")
+    @SerializedName("weather")
     @Expose
     private List<CurrentWeather.Weather> weatherList = null;
     @SerializedName("base")
@@ -30,7 +30,7 @@ public class CurrentWeather {
     private Clouds clouds;
     @SerializedName("dt")
     @Expose
-    private Integer dt;
+    private long dt;
     @SerializedName("sys")
     @Expose
     private Sys sys;
@@ -100,7 +100,7 @@ public class CurrentWeather {
         this.clouds = clouds;
     }
 
-    public Integer getDt() {
+    public long getDt() {
         return dt;
     }
 
@@ -249,10 +249,10 @@ public class CurrentWeather {
         private String country;
         @SerializedName("sunrise")
         @Expose
-        private Integer sunrise;
+        private long sunrise;
         @SerializedName("sunset")
         @Expose
-        private Integer sunset;
+        private long sunset;
 
         public Double getMessage() {
             return message;
@@ -270,19 +270,19 @@ public class CurrentWeather {
             this.country = country;
         }
 
-        public Integer getSunrise() {
+        public long getSunrise() {
             return sunrise;
         }
 
-        public void setSunrise(Integer sunrise) {
+        public void setSunrise(long sunrise) {
             this.sunrise = sunrise;
         }
 
-        public Integer getSunset() {
+        public long getSunset() {
             return sunset;
         }
 
-        public void setSunset(Integer sunset) {
+        public void setSunset(long sunset) {
             this.sunset = sunset;
         }
 

@@ -16,9 +16,9 @@ public class ForecastWeather {
     @SerializedName("cnt")
     @Expose
     private Integer cnt;
-    @SerializedName("weatherList")
+    @SerializedName("list")
     @Expose
-    private java.util.List<WeatherList> weatherList;
+    private java.util.List<ForecastWeather.List> list = null;
 
     public City getCity() {
         return city;
@@ -52,12 +52,12 @@ public class ForecastWeather {
         this.cnt = cnt;
     }
 
-    public java.util.List<WeatherList> getWeatherList() {
-        return weatherList;
+    public java.util.List<ForecastWeather.List> getList() {
+        return list;
     }
 
-    public void setWeatherList(java.util.List<WeatherList> weatherList) {
-        this.weatherList = weatherList;
+    public void setList(java.util.List<ForecastWeather.List> list) {
+        this.list = list;
     }
 
     public class City {
@@ -259,7 +259,8 @@ public class ForecastWeather {
         }
     }
 
-    public class WeatherList {
+    public class List {
+
         @SerializedName("dt")
         @Expose
         private Integer dt;
@@ -359,5 +360,6 @@ public class ForecastWeather {
         public void setRain(Double rain) {
             this.rain = rain;
         }
+
     }
 }

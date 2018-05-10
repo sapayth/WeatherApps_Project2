@@ -1,14 +1,21 @@
 package org.bitm.nullpointers.weatherapps;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.bitm.nullpointers.weatherapps.Utils.CurrentWeather;
 import org.bitm.nullpointers.weatherapps.Utils.WeatherCurrentApi;
@@ -49,6 +56,11 @@ public class WeatherFragment extends Fragment {
     TextView humidityTV;
     TextView pressureTV;
 
+    TextView failedTV;
+
+    ImageView weatherIconIV;
+
+    String imageIdStr;
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -76,6 +88,9 @@ public class WeatherFragment extends Fragment {
         sunsetTV = view.findViewById(R.id.sunsetTextView);
         humidityTV = view.findViewById(R.id.humidityTextView);
         pressureTV = view.findViewById(R.id.pressureTextView);
+        weatherIconIV = view.findViewById(R.id.weatherIconImageView);
+
+        failedTV = view.findViewById(R.id.failedTextView);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DAY_BASE_URL)
@@ -85,24 +100,35 @@ public class WeatherFragment extends Fragment {
         weatherCurrentApi = retrofit.create(WeatherCurrentApi.class);
 
         urlString = String.format("weather?lat=%f&lon=%f&cnt=7&units=%s&appid=%s",
-                34.966671,
-                138.933334,
+                23.777176,
+                90.399452,
                 units,
                 getString(R.string.weather_api_key));
 
         Call<CurrentWeather> responseCall = weatherCurrentApi.getCurrentWeatherData(urlString);
 
+        // Set up progress before call
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMax(100);
+        progressDialog.setMessage("Its loading....");
+        progressDialog.setTitle("Fetching Data");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        // show it
+        progressDialog.show();
+
         responseCall.enqueue(new Callback<CurrentWeather>() {
             @Override
             public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
                 if (response.isSuccessful()) {
+                    progressDialog.dismiss();
                     CurrentWeather currentWeather = response.body();
                     CurrentWeather.Main main = currentWeather.getMain();
                     CurrentWeather.Sys sys = currentWeather.getSys();
 
-//                    List<CurrentWeather.Weather> weatherList = currentWeather.getWeatherList();
-//                    CurrentWeather.Weather weather = weatherList.get(0);
-//                    weatherDescTV.setText(weather.getDescription() + "");
+                    List<CurrentWeather.Weather> weatherList = currentWeather.getWeatherList();
+                    CurrentWeather.Weather weather = weatherList.get(0);
+                    weatherDescTV.setText(weather.getDescription() + "");
 
                     double temperature = main.getTemp();
                     temperatureTV.setText(temperature + " \u00B0C");
@@ -110,15 +136,24 @@ public class WeatherFragment extends Fragment {
                     dayTV.setText(unixToDay(currentWeather.getDt()));
                     maxTV.setText(main.getTempMax() + " \u00B0C");
                     minTV.setText(main.getTempMin() + " \u00B0C");
-                    sunriseTV.setText(getTimeFromUnix(sys.getSunrise()));
-                    sunsetTV.setText(getTimeFromUnix(sys.getSunset()));
+
+                    imageIdStr = weatherList.get(0).getIcon();
+                    long sunrise = sys.getSunrise();
+                    long sunset = sys.getSunset();
+
+                    sunriseTV.setText(getTimeFromUnix(sunrise));
+                    sunsetTV.setText(getTimeFromUnix(sunset));
                     humidityTV.setText(main.getHumidity() + "%");
                     pressureTV.setText(main.getPressure() + "hPa");
+
+                    Picasso.get().load("https://openweathermap.org/img/w/" + imageIdStr + ".png").into(weatherIconIV);
                 }
             }
 
             @Override
             public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                progressDialog.dismiss();
+                failedTV.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -131,28 +166,28 @@ public class WeatherFragment extends Fragment {
         cal.setTime(dateTime);
         int dayInt = cal.get(Calendar.DAY_OF_WEEK);
 
-        String dayStr = "";
+        String dayStr = "Saturday";
 
         switch (dayInt) {
-            case 0:
+            case Calendar.SATURDAY:
                 dayStr = "Saturday";
                 break;
-            case 1:
+            case Calendar.SUNDAY:
                 dayStr = "Sunday";
                 break;
-            case 2:
+            case Calendar.MONDAY:
                 dayStr = "Monday";
                 break;
-            case 3:
+            case Calendar.TUESDAY:
                 dayStr = "Tuesday";
                 break;
-            case 4:
+            case Calendar.WEDNESDAY:
                 dayStr = "Wednesday";
                 break;
-            case 5:
+            case Calendar.THURSDAY:
                 dayStr = "Thursday";
                 break;
-            case 6:
+            case Calendar.FRIDAY:
                 dayStr = "Friday";
                 break;
         }
@@ -171,23 +206,12 @@ public class WeatherFragment extends Fragment {
     }
 
     private String getTimeFromUnix(long timestamp) {
-        java.util.Date dateTime = new java.util.Date(timestamp);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dateTime);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp * 1000L);
 
-        int hour = cal.get(Calendar.HOUR);
-        int minutes = cal.get(Calendar.MINUTE);
-        int seconds = cal.get(Calendar.SECOND);
+        Date d = calendar.getTime();
+        String timeStr = new SimpleDateFormat("hh:mm a").format(d);
 
-        String formattedTime = "";
-
-        if (hour >= 12) {
-            hour -= 12;
-            formattedTime = hour + ":" + minutes + ":" + seconds + "AM";
-        } else {
-            formattedTime = hour + ":" + minutes + ":" + seconds + "AM";
-        }
-
-        return formattedTime;
+        return timeStr;
     }
 }

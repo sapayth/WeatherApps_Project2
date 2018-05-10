@@ -6,15 +6,6 @@
     android:padding="16dp"
     tools:context="org.bitm.nullpointers.weatherapps.ForecastWeatherFragment">
 
-
-    <TextView
-        android:id="@+id/noForecastDataTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_data_found_yet"
-        android:textSize="20sp"
-        android:layout_gravity="center"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/weatherForecastRecyclerView"
         android:layout_width="match_parent"
