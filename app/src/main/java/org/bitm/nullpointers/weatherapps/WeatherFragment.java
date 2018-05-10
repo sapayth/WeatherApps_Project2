@@ -100,8 +100,8 @@ public class WeatherFragment extends Fragment {
         weatherCurrentApi = retrofit.create(WeatherCurrentApi.class);
 
         urlString = String.format("weather?lat=%f&lon=%f&cnt=7&units=%s&appid=%s",
-                23.777176,
-                90.399452,
+                MainActivity.latitude,
+                MainActivity.longitude,
                 units,
                 getString(R.string.weather_api_key));
 
@@ -146,6 +146,8 @@ public class WeatherFragment extends Fragment {
                     humidityTV.setText(main.getHumidity() + "%");
                     pressureTV.setText(main.getPressure() + "hPa");
 
+                    locationTV.setText(currentWeather.getName());
+
                     Picasso.get().load("https://openweathermap.org/img/w/" + imageIdStr + ".png").into(weatherIconIV);
                 }
             }
@@ -154,7 +156,6 @@ public class WeatherFragment extends Fragment {
             public void onFailure(Call<CurrentWeather> call, Throwable t) {
                 progressDialog.dismiss();
                 failedTV.setVisibility(View.VISIBLE);
-                Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
             }
         });
 

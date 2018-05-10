@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.bitm.nullpointers.weatherapps.Utils.ForecastAdapter;
@@ -33,6 +34,8 @@ public class ForecastWeatherFragment extends Fragment {
     private long longitude;
     private int cnt;
     private String units = "metric"; //imperial
+
+    TextView noDataTV;
 
     private RecyclerView forecastRecyclerView;
     private RecyclerView.Adapter forecastAdapter;
@@ -63,6 +66,8 @@ public class ForecastWeatherFragment extends Fragment {
         forecastRecyclerView = view.findViewById(R.id.weatherForecastRecyclerView);
         forecastRecyclerView.setHasFixedSize(true);
         forecastRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        noDataTV = view.findViewById(R.id.noDataTextView);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(FORECAST_BASE_URL)
@@ -95,7 +100,7 @@ public class ForecastWeatherFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ForecastWeather> call, Throwable t) {
-                Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
+                noDataTV.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -3,4 +3,8 @@
     <string name="weather_api_key">0227e6010071a6909fc84a8b6c5d2037</string>
     <string name="no_data_found_yet">No Data Found Yet</string>
     <string name="search">search</string>
+    <string name="sun_rise">Sun Rise</string>
+    <string name="sun_set">Sun Set</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
 </resources>
