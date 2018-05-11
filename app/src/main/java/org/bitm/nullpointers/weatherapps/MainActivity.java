@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,27 +43,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        checkLocationPermission();
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i("onPlaceSelected: ", "Place: " + place.getName());
                 latitude = place.getLatLng().latitude;
-                longitude = place.getLatLng().latitude;
+                longitude = place.getLatLng().longitude;
+                viewPager = findViewById(R.id.viewPagerForTab);
+                setupViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager);
             }
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i("onError: ", "An error occurred: " + status);
+                Toast.makeText(MainActivity.this, "Place search error", Toast.LENGTH_SHORT).show();
             }
         });
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        checkLocationPermission();
 
         if (!isNetworkAvailable()) {
             Toast.makeText(this, "No network connection", Toast.LENGTH_SHORT).show();
@@ -89,21 +91,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-
         return super.onCreateOptionsMenu(menu);
     }
 

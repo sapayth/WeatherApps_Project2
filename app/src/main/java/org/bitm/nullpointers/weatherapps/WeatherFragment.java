@@ -37,6 +37,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class WeatherFragment extends Fragment {
 
+    public static boolean shouldRefreshOnResume = false;
+
     private Retrofit retrofit;
     private WeatherCurrentApi weatherCurrentApi;
     private String urlString;
@@ -61,6 +63,20 @@ public class WeatherFragment extends Fragment {
     ImageView weatherIconIV;
 
     String imageIdStr;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(shouldRefreshOnResume){
+            // refresh fragment
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        shouldRefreshOnResume = true;
+    }
 
     public WeatherFragment() {
         // Required empty public constructor

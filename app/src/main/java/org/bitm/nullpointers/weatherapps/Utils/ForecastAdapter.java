@@ -43,7 +43,13 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         String iconId = currentForecastWeather.getWeather().get(0).getIcon();
 
-        holder.dayTV.setText(unixToDay(currentForecastWeather.getDt()));
+        if (position == 0) {
+            holder.dayTV.setText("Today");
+        } else if (position == 1) {
+            holder.dayTV.setText("Tomorrow");
+        } else {
+            holder.dayTV.setText(unixToDay(currentForecastWeather.getDt()));
+        }
         holder.maxTV.setText("Max: " + temperature.getMax() + "\u00B0 C");
         holder.dateTV.setText(unixToDate(currentForecastWeather.getDt()));
         holder.minTV.setText("Min: " + temperature.getMin() + "\u00B0 C");
