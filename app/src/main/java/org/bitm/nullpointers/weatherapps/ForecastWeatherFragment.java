@@ -30,9 +30,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ForecastWeatherFragment extends Fragment {
 
+    public static boolean forecastFragmentRefresh = false;
+
     private long latitude;
     private long longitude;
-    private int cnt;
+    private int cnt = 7;
     private String units = "metric"; //imperial
 
     TextView noDataTV;
@@ -52,8 +54,20 @@ public class ForecastWeatherFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(forecastFragmentRefresh){
+            // refresh fragment
+        }
+    }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        forecastFragmentRefresh = true;
+    }
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_forecast_weather, container, false);
@@ -77,10 +91,10 @@ public class ForecastWeatherFragment extends Fragment {
         weatherForecastApi = retrofit.create(WeatherForecastApi.class);
 
         urlString = String.format("daily?lat=%f&lon=%f&units=%s&cnt=%d&appid=%s",
-                34.966671,
-                138.933334,
+                MainActivity.latitude,
+                MainActivity.longitude,
                 units,
-                7,
+                cnt,
                 getString(R.string.weather_api_key));
 
         Call<ForecastWeather> responseCall = weatherForecastApi.getWeatherData(urlString);

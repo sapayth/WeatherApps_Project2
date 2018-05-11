@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="Min: 9.2\u00B0 C " />
+                    tools:text="Min: 9.2\u00B0C " />
             </LinearLayout>
 
             <LinearLayout
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="viewEnd"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="Max: 18.0\u00B0 C " />
+                    tools:text="Max: 18.0\u00B0C " />
             </LinearLayout>
 
         </LinearLayout>
